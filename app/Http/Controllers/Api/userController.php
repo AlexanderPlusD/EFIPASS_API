@@ -75,6 +75,36 @@ class userController extends Controller
         ], 200);
     }
 
+    public function store(Request $request) {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'phone' => 'required|digits:10', 
+            'direction' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email', 
+            'password' => 'required|string|min:8', 
+        ]);
+    
+        
+        $user = User::create([
+            'id' => \Illuminate\Support\Str::uuid()->toString(), 
+            'name' => $validatedData['name'],
+            'lastname' => $validatedData['lastname'],
+            'phone' => $validatedData['phone'],
+            'direction' => $validatedData['direction'],
+            'type' => $validatedData['type'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+        ]);
+    
+        return response()->json([
+            'message' => 'Usuario creado exitosamente.',
+            'user' => $user,
+        ]);
+    }
+    
+
 
     
 }

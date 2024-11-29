@@ -12,11 +12,14 @@ class User extends Model
     protected $table = "user";
 
     protected $fillable = [
-
         'name',
         'lastname',
         'phone',
-        'type'
-
+        'type',
+        'direction',
+        'email',
+        'password',
+        'activeUser',
+        'statusUser'
     ];
 }
