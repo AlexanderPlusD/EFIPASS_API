@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class userController extends Controller
 {
@@ -75,29 +76,40 @@ class userController extends Controller
         ], 200);
     }
 
+   
+
     public function store(Request $request) {
-        $validatedData = $request->validate([
+        
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'phone' => 'required|digits:10', 
+            'phone' => 'required|digits:10',
             'direction' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email', 
-            'password' => 'required|string|min:8', 
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
         ]);
     
-        
+       
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+   
         $user = User::create([
-            'id' => \Illuminate\Support\Str::uuid()->toString(), 
-            'name' => $validatedData['name'],
-            'lastname' => $validatedData['lastname'],
-            'phone' => $validatedData['phone'],
-            'direction' => $validatedData['direction'],
-            'type' => $validatedData['type'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
+            'id' => \Illuminate\Support\Str::uuid()->toString(),
+            'name' => $request->name,
+            'lastname' => $request->lastname,
+            'phone' => $request->phone,
+            'direction' => $request->direction,
+            'type' => $request->type,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
         ]);
     
+       
         return response()->json([
             'message' => 'Usuario creado exitosamente.',
             'user' => $user,
