@@ -9,14 +9,14 @@ class User extends Model
 {
     use HasFactory;
 
-    protected $table = "user";
+    protected $table = "users";
 
     protected $fillable = [
         'name',
         'lastname',
         'phone',
         'type',
-        'direction',
+        'address',
         'email',
         'password',
         'activeUser',

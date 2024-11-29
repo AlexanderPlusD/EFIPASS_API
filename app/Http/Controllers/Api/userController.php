@@ -44,44 +44,46 @@ class userController extends Controller
         return response()->json($user, 200);
     }
 
-    public function delete($id, Request $request)
+    public function delete($id)
     {
+        try {
+            $user = User::find($id);
 
-        $user = User::find($id);
+            if (!$user) {
+                return response()->json([
+                    'message' => 'Usuario no encontrado',
+                    'status' => 404
+                ], 404);
+            }
 
+            
+            $user->activeUser = 0;
+            $user->statusUser = 0;
 
-        if (!$user) {
+            $user->save();
+
             return response()->json([
-                'message' => 'Usuario no encontrado',
-                'status' => 404
-            ], 404);
+                'message' => 'Usuario desactivado correctamente',
+                'status' => 200,
+                'data' => $user
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al desactivar el usuario',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-
-        $validated = $request->validate([
-            'activoUser' => 'required|boolean',
-            'estadoUser' => 'required|boolean',
-        ]);
-
-
-        $user->activoUser = $validated['activoUser'];
-        $user->estadoUser = $validated['statusUser'];
-        $user->save();
-
-
-        return response()->json([
-            'message' => 'Usuario actualizado correctamente',
-            'status' => 200,
-            'data' => $user
-        ], 200);
     }
+
+
 
     public function store(Request $request) {
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'phone' => 'required|digits:10',
+            'phone' => 'required|digits:10|unique:users,phone',
             'address' => 'required|string|max:255',
             'type' => 'required|string|in:admin,user',
             'email' => 'required|email|unique:users,email',
@@ -97,7 +99,6 @@ class userController extends Controller
 
         try {
             $user = User::create([
-                'id' => \Illuminate\Support\Str::uuid()->toString(),
                 'name' => $request->name,
                 'lastname' => $request->lastname,
                 'phone' => $request->phone,
