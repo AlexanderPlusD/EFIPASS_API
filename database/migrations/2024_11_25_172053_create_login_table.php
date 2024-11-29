@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user', function (Blueprint $table) {
-            $table->uuid('id')->primary(); 
+        Schema::create('users', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('lastname');
             $table->string('phone');
@@ -24,10 +24,10 @@ return new class extends Migration
             $table->boolean('statusUser')->default(1);
             $table->timestamps();
         });
-        
+
     }
 
-    
+
 
     /**
      * Reverse the migrations.
