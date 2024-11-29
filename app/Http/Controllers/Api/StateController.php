@@ -38,7 +38,7 @@ class StateController extends Controller
 
             $data = [
 
-                'massage' => 'Estado no encontrado',
+                'message' => 'Estado no encontrado',
                 'status' => 404
 
             ];
@@ -47,7 +47,7 @@ class StateController extends Controller
 
         }
 
-        return response()->json($State);
+        return response()->json($State, 200);
 
 
     }
@@ -81,10 +81,9 @@ class StateController extends Controller
             return response()->json([
 
                 'message' => 'Estado desactivado correctamente',
-                'status'=> 200,
                 'data' => $State
 
-            ]);
+            ], 200);
 
         } catch (\Exception $e) {
 
