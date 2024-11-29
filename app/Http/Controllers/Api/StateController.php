@@ -98,4 +98,57 @@ class StateController extends Controller
 
 
     }
+
+
+    public function store(Request $request) {
+
+        try {
+
+            $name = $request->input('name');
+            $images = $request->input('image');
+
+
+            if (!$name){
+
+
+                return response()->json() ([
+
+                    'message'=> 'Proporciona los datos correctos',
+                    'status'=> 404
+
+                ], 404);
+
+            }
+
+            $state = State::create([
+
+                'name'=> $name,
+                'image' => $images
+
+            ]);
+
+
+            return response()->json([
+
+                'message'=> 'Estado creado exitosamente',
+                'data'=> $state
+
+            
+            ], 200);
+
+
+        }catch  (\Exception $e){
+
+
+            return response()->json([
+
+                'message' => 'Error al crear estado',
+                'error' => $e->getMessage()
+
+            ]);
+
+
+        }
+
+    }
 }

@@ -21,6 +21,12 @@ Route::post("/plans", [PlanController::class, "store"]);
 
 Route::get("/states", [StateController::class, "index"]);
 
+Route::post("/states", [StateController::class, "store"]);
+
 Route::get("/states/{id}", [StateController::class, "show"]);
 
 Route::put("/delete/states", [StateController::class,"delete"]);
+
+Route::get("/recharges/{id}", [PlanController::class, "show"]);
+
+Route::post("/delete/recharges", [PlanController::class, "delete"]);
